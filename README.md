@@ -25,7 +25,7 @@ npm run dev
 
 ## ⏱️ Time Spent
 
-**Total:** `15 Hours: 26 Minutes`\
+**Total:** `15 Hours: 26 Minutes`
 
 ------------------------------------------------------------------------
 
