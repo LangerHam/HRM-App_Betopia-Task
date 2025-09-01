@@ -1,6 +1,6 @@
-// components/ui/table.tsx
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -11,23 +11,16 @@ const Table = React.forwardRef<
     className={cn("w-full caption-bottom text-sm border-collapse", className)}
     {...props}
   />
-))
-Table.displayName = "Table"
+));
+Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead
-    ref={ref}
-    className={cn(
-      "bg-gray-100 dark:bg-gray-800 [&_tr]:border-b border-gray-200 dark:border-gray-700",
-      className
-    )}
-    {...props}
-  />
-))
-TableHeader.displayName = "TableHeader"
+  <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
+));
+TableHeader.displayName = "TableHeader";
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
@@ -38,72 +31,94 @@ const TableBody = React.forwardRef<
     className={cn("[&_tr:last-child]:border-0", className)}
     {...props}
   />
-))
-TableBody.displayName = "TableBody"
+));
+TableBody.displayName = "TableBody";
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn(
-      "border-b border-gray-200 dark:border-gray-700 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50",
-      className
-    )}
-    {...props}
-  />
-))
-TableRow.displayName = "TableRow"
+>(({ className, ...props }, ref) => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme === "dark" : false;
+
+  return (
+    <tr
+      ref={ref}
+      className={cn(
+        "border-b transition-colors",
+        isDark
+          ? "border-gray-700 hover:bg-gray-800"
+          : "border-gray-200 hover:bg-gray-50",
+        className
+      )}
+      {...props}
+    />
+  );
+});
+TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-gray-700 dark:text-gray-300",
-      className
-    )}
-    {...props}
-  />
-))
-TableHead.displayName = "TableHead"
+>(({ className, ...props }, ref) => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme === "dark" : false;
+
+  return (
+    <th
+      ref={ref}
+      className={cn(
+        "h-12 px-4 text-left align-middle font-medium border-b",
+        isDark
+          ? "text-gray-300 border-gray-700"
+          : "text-gray-700 border-gray-200",
+        className
+      )}
+      {...props}
+    />
+  );
+});
+TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <td
-    ref={ref}
-    className={cn(
-      "p-4 align-middle text-gray-800 dark:text-gray-200",
-      className
-    )}
-    {...props}
-  />
-))
-TableCell.displayName = "TableCell"
+>(({ className, ...props }, ref) => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-const TableCaption = React.forwardRef<
-  HTMLTableCaptionElement,
-  React.HTMLAttributes<HTMLTableCaptionElement>
->(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    className={cn("mt-4 text-sm text-gray-500 dark:text-gray-400", className)}
-    {...props}
-  />
-))
-TableCaption.displayName = "TableCaption"
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-  TableCaption,
-}
+  const isDark = mounted ? resolvedTheme === "dark" : false;
+
+  return (
+    <td
+      ref={ref}
+      className={cn(
+        "px-4 py-2 align-middle border-b",
+        isDark
+          ? "text-gray-200 border-gray-700"
+          : "text-gray-800 border-gray-200",
+        className
+      )}
+      {...props}
+    />
+  );
+});
+TableCell.displayName = "TableCell";
+
+export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell };

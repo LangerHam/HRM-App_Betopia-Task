@@ -1,48 +1,68 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { StatusBadge } from "@/components/ui/status-badge"
-import { DataTable } from "@/components/ui/data-table"
-import { MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useEmployees } from "@/hooks/useEmployees"
-import type { Employee } from "@/lib/types/employee"
+import { useTheme } from "next-themes";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { DataTable } from "@/components/ui/data-table";
+import { MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useEmployees } from "@/hooks/useEmployees";
+import type { Employee } from "@/lib/types/employee";
+import { cn } from "@/lib/utils";
 
 interface EmployeeTableProps {
-  employees: Employee[]
+  employees: Employee[];
 }
 
 export function EmployeeTable({ employees }: EmployeeTableProps) {
-  const { handleDeleteEmployee } = useEmployees()
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
+  const { handleDeleteEmployee } = useEmployees();
+  const { resolvedTheme } = useTheme();
+
+  const isDark = resolvedTheme === "dark";
 
   const handleDelete = async (id: string, name: string) => {
     try {
-      await handleDeleteEmployee(id)
-      console.log(`Employee deleted: ${name} has been removed from the system.`)
-    } catch (error) {
-      console.error("Failed to delete employee. Please try again.")
+      await handleDeleteEmployee(id);
+      console.log(
+        `Employee deleted: ${name} has been removed from the system.`
+      );
+    } catch {
+      console.error("Failed to delete employee. Please try again.");
     }
-  }
+  };
 
   const columns: ColumnDef<Employee>[] = [
     {
       accessorKey: "name",
       header: "Employee Name",
       cell: ({ row }) => {
-        const employee = row.original
+        const employee = row.original;
         return (
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src={employee.avatar || "/placeholder.svg"} alt={employee.name} />
+              <AvatarImage
+                src={employee.avatar || "/placeholder.svg"}
+                alt={employee.name}
+              />
               <AvatarFallback>{employee.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span className="font-medium">{employee.name}</span>
+            <span
+              className={cn(
+                "font-medium",
+                isDark ? "text-gray-100" : "text-gray-900"
+              )}
+            >
+              {employee.name}
+            </span>
           </div>
-        )
+        );
       },
     },
     {
@@ -71,7 +91,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
       id: "actions",
       header: "Action",
       cell: ({ row }) => {
-        const employee = row.original
+        const employee = row.original;
 
         return (
           <DropdownMenu>
@@ -81,7 +101,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setSelectedEmployee(employee)}>
+              <DropdownMenuItem>
                 <Eye className="mr-2 h-4 w-4" />
                 View
               </DropdownMenuItem>
@@ -98,10 +118,17 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
-  return <DataTable columns={columns} data={employees} searchKey="name" searchPlaceholder="Search employees..." />
+  return (
+    <DataTable
+      columns={columns}
+      data={employees}
+      searchKey="name"
+      searchPlaceholder="Search employees..."
+    />
+  );
 }

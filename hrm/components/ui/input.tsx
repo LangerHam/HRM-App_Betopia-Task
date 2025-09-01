@@ -4,9 +4,11 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-export function Input({ className, type, ...props }: InputProps) {
+export function Input({
+  className,
+  type,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement>) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 

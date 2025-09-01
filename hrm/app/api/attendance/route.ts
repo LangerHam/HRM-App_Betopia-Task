@@ -17,7 +17,7 @@ const mockAttendance: AttendanceRecord[] = [
   {
     id: "2",
     employeeId: "#U1323",
-    name: "David Do",
+    name: "Gabriel Cho",
     avatar: "/professional-woman-developer.png",
     email: "ducphu.forwork@gmail.com",
     phone: "09842742274",
@@ -29,7 +29,7 @@ const mockAttendance: AttendanceRecord[] = [
   {
     id: "3",
     employeeId: "#U1323",
-    name: "David Do",
+    name: "Van Pelt",
     avatar: "/professional-woman-designer.png",
     email: "example@gmail.com",
     phone: "09842742274",
@@ -41,7 +41,7 @@ const mockAttendance: AttendanceRecord[] = [
   {
     id: "4",
     employeeId: "#U1323",
-    name: "David Do",
+    name: "Patrick Jane",
     avatar: "/professional-man-account.png",
     email: "example@gmail.com",
     phone: "09842742274",

@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   Users,
@@ -15,7 +17,7 @@ import {
   CalendarDays,
   HelpCircle,
   Settings,
-} from "lucide-react"
+} from "lucide-react";
 
 const sidebarItems = [
   {
@@ -63,7 +65,7 @@ const sidebarItems = [
     href: "#",
     icon: CalendarDays,
   },
-]
+];
 
 const otherItems = [
   {
@@ -76,23 +78,51 @@ const otherItems = [
     href: "#",
     icon: Settings,
   },
-]
+];
 
 export function DashboardSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="hidden md:flex w-64 bg-background border-border flex-col">
+        <div className="flex h-16 items-center px-6">
+          <div className="flex items-center">
+            <img
+              src="/Logo2.png"
+              alt="Betopia Group"
+              className="h-15 w-auto lg:h-16"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <div className="hidden md:flex w-64 bg-background border-r border-border flex-col">
+    <div className="hidden md:flex w-64 bg-background border-border flex-col">
       {/* Logo */}
       <div className="flex h-16 items-center px-6">
         <div className="flex items-center">
           <img
-            src="/Logo2.png" 
+            src="/Logo2.png"
             alt="Betopia Group"
-            className="h-15 w-auto lg:h-16"
+            className={cn(
+              "h-15 w-auto lg:h-16 transition-all",
+              isDark && "invert"
+            )}
           />
         </div>
-      </div><br/>
+      </div>
+      <br />
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">

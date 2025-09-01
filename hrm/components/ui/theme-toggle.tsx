@@ -22,7 +22,7 @@ export function ThemeToggle() {
 
   const handleThemeSelect = (selectedTheme: string) => {
     setTheme(selectedTheme);
-    setOpen(false); 
+    setOpen(false);
   };
 
   if (!mounted) {
@@ -34,12 +34,17 @@ export function ThemeToggle() {
     );
   }
 
+  const isDark = resolvedTheme === "dark";
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-9 w-9">
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          {isDark ? (
+            <Moon className="h-4 w-4 transition-all" />
+          ) : (
+            <Sun className="h-4 w-4 transition-all" />
+          )}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

@@ -1,16 +1,17 @@
-import type React from "react"
-import { cn } from "@/lib/utils"
+import type React from "react";
+import { cn } from "@/lib/utils";
 
-interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
-
-export function Label({ className, ...props }: LabelProps) {
+export function Label({
+  className,
+  ...props
+}: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
       className={cn(
         "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }

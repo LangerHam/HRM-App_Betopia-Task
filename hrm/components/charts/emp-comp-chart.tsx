@@ -14,7 +14,9 @@ interface EmployeeCompositionChartProps {
   data: CompositionData[];
 }
 
-export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps) {
+export function EmployeeCompositionChart({
+  data,
+}: EmployeeCompositionChartProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
@@ -30,8 +32,8 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
 
   const textColor = mounted
     ? resolvedTheme === "dark"
-      ? "#D1D5DB" 
-      : "#374151" 
+      ? "#D1D5DB"
+      : "#374151"
     : "#374151";
 
   const mutedTextColor = mounted
@@ -47,7 +49,17 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
     innerRadius,
     outerRadius,
     percent,
-  }: any) => {
+  }: {
+    cx?: number;
+    cy?: number;
+    midAngle?: number;
+    innerRadius?: number;
+    outerRadius?: number;
+    percent?: number;
+  }) => {
+    if (!cx || !cy || !midAngle || !innerRadius || !outerRadius || !percent) {
+      return null;
+    }
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -96,9 +108,14 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
               <Legend
                 verticalAlign="bottom"
                 height={36}
-                formatter={(value, entry: any) => (
+                formatter={(value, entry) => (
                   <span style={{ color: mutedTextColor, fontSize: 12 }}>
-                    {value} ({entry.payload.value})
+                    {value} (
+                    {
+                      (entry as unknown as { payload: { value: number } })
+                        .payload.value
+                    }
+                    )
                   </span>
                 )}
               />

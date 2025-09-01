@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTheme } from "next-themes";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -21,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,14 +37,16 @@ export function DataTable<TData, TValue>({
   searchKey,
   searchPlaceholder = "Search...",
 }: DataTableProps<TData, TValue>) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] =
-    React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [mounted, setMounted] = React.useState(false);
+  const { resolvedTheme } = useTheme();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const table = useReactTable({
     data,
@@ -56,53 +59,41 @@ export function DataTable<TData, TValue>({
     state: { sorting, columnFilters },
   });
 
-  // Colors based on theme
-  const borderColor = mounted
-    ? resolvedTheme === "dark"
-      ? "border-gray-700"
-      : "border-gray-200"
-    : "border-gray-200";
+  if (!mounted) {
+    return <div>Loading...</div>;
+  }
 
-  const textColor = mounted
-    ? resolvedTheme === "dark"
-      ? "text-gray-200"
-      : "text-gray-800"
-    : "text-gray-800";
-
-  const headerTextColor = mounted
-    ? resolvedTheme === "dark"
-      ? "text-gray-300"
-      : "text-gray-600"
-    : "text-gray-600";
+  const isDark = resolvedTheme === "dark";
 
   return (
     <div className="space-y-4">
       {searchKey && (
-        <div className="flex items-center space-x-2">
-          <div className="relative flex-1 max-w-sm">
-            <Search
-              className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${textColor}`}
-            />
-            <Input
-              placeholder={searchPlaceholder}
-              value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-              onChange={(event: { target: { value: any } }) =>
-                table.getColumn(searchKey)?.setFilterValue(event.target.value)
-              }
-              className="pl-9"
-            />
-          </div>
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Input
+            placeholder={searchPlaceholder}
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            }
+            className="pl-9"
+          />
         </div>
       )}
       <div
-        className={`rounded-md border ${borderColor} bg-white dark:bg-gray-900 shadow-sm`}
+        className={cn(
+          "rounded-md border overflow-hidden",
+          isDark ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-white"
+        )}
       >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className={`border-b ${borderColor}`}>
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className={headerTextColor}>
+                  <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -120,20 +111,22 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={`border-b ${borderColor} hover:bg-gray-50 dark:hover:bg-gray-800/50`}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className={textColor}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
-              <TableRow className={`border-b ${borderColor}`}>
+              <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className={`h-24 text-center ${textColor}`}
+                  className="h-24 text-center"
                 >
                   No results.
                 </TableCell>

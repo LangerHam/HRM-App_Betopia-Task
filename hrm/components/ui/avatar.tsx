@@ -4,21 +4,38 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
-interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function Avatar({ className, ...props }: AvatarProps) {
-  return <div className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)} {...props} />;
+export function Avatar({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
-interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {}
-
-export function AvatarImage({ className, ...props }: AvatarImageProps) {
-  return <img className={cn("aspect-square h-full w-full object-cover", className)} {...props} />;
+export function AvatarImage({
+  className,
+  ...props
+}: React.ImgHTMLAttributes<HTMLImageElement>) {
+  return (
+    <img
+      className={cn("aspect-square h-full w-full object-cover", className)}
+      alt=""
+      {...props}
+    />
+  );
 }
 
-interface AvatarFallbackProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function AvatarFallback({ className, ...props }: AvatarFallbackProps) {
+export function AvatarFallback({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 

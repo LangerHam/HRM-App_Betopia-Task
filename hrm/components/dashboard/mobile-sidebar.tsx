@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 import {
   LayoutDashboard,
   Users,
@@ -19,7 +20,7 @@ import {
   CalendarDays,
   HelpCircle,
   Settings,
-} from "lucide-react"
+} from "lucide-react";
 
 const sidebarItems = [
   {
@@ -67,7 +68,7 @@ const sidebarItems = [
     href: "#",
     icon: CalendarDays,
   },
-]
+];
 
 const otherItems = [
   {
@@ -80,11 +81,34 @@ const otherItems = [
     href: "#",
     icon: Settings,
   },
-]
+];
 
 export function MobileSidebar() {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" className="md:hidden">
+            <Menu className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-64 p-0">
+          <div>Loading...</div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -99,9 +123,12 @@ export function MobileSidebar() {
           <div className="flex h-16 items-center px-6">
             <div className="flex items-center">
               <img
-                src="/Logo2.png" 
+                src="/Logo2.png"
                 alt="Betopia Group"
-                className="h-8 w-auto lg:h-16" 
+                className={cn(
+                  "h-8 w-auto lg:h-16 transition-all",
+                  isDark && "invert"
+                )}
               />
             </div>
           </div>
@@ -120,8 +147,12 @@ export function MobileSidebar() {
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-orange-100 text-orange-900 dark:bg-orange-900/20 dark:text-orange-400"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                      ? isDark
+                        ? "bg-orange-900/20 text-orange-400"
+                        : "bg-orange-100 text-orange-900"
+                      : isDark
+                      ? "text-gray-400 hover:bg-gray-800 hover:text-gray-100"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -132,7 +163,12 @@ export function MobileSidebar() {
           </nav>
 
           <div className="p-4">
-            <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 px-3">
+            <p
+              className={cn(
+                "text-xs font-medium mb-2 px-3",
+                isDark ? "text-gray-400" : "text-gray-600"
+              )}
+            >
               OTHER
             </p>
             <div className="space-y-1">
@@ -148,8 +184,12 @@ export function MobileSidebar() {
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-orange-100 text-orange-900 dark:bg-orange-900/20 dark:text-orange-400"
-                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                        ? isDark
+                          ? "bg-orange-900/20 text-orange-400"
+                          : "bg-orange-100 text-orange-900"
+                        : isDark
+                        ? "text-gray-400 hover:bg-gray-800 hover:text-gray-100"
+                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                     )}
                   >
                     <Icon className="h-4 w-4" />

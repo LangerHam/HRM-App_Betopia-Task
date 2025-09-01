@@ -14,7 +14,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         defaultTheme="system" 
         enableSystem 
         disableTransitionOnChange={false}
-        storageKey="hrm-theme"
       >
         {children}
       </ThemeProvider>

@@ -1,19 +1,29 @@
-"use client"
+"use client";
 
-import type { ColumnDef } from "@tanstack/react-table"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { StatusBadge } from "@/components/ui/status-badge"
-import { DataTable } from "@/components/ui/data-table"
-import { MoreHorizontal } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import type { AttendanceRecord } from "@/lib/types/employee"
+import { useEffect, useState } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { DataTable } from "@/components/ui/data-table";
+import { MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import type { AttendanceRecord } from "@/lib/types/employee";
 
 interface AttendanceTableProps {
-  attendance: AttendanceRecord[]
+  attendance: AttendanceRecord[];
 }
 
 export function AttendanceTable({ attendance }: AttendanceTableProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+  }
+
   const columns: ColumnDef<AttendanceRecord>[] = [
     {
       id: "select",
@@ -42,16 +52,21 @@ export function AttendanceTable({ attendance }: AttendanceTableProps) {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => {
-        const record = row.original
+        const record = row.original;
         return (
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={record.avatar || "/placeholder.svg"} alt={record.name} />
+              <AvatarImage
+                src={record.avatar || "/placeholder.svg"}
+                alt={record.name}
+              />
               <AvatarFallback>{record.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span className="font-medium text-gray-900 dark:text-gray-100">{record.name}</span>
+            <span className="font-medium text-gray-800 dark:text-gray-400">
+              {record.name}
+            </span>
           </div>
-        )
+        );
       },
     },
     {
@@ -70,9 +85,9 @@ export function AttendanceTable({ attendance }: AttendanceTableProps) {
       accessorKey: "reimbursement",
       header: "Reimbursement",
       cell: ({ row }) => {
-        const amount = row.getValue("reimbursement") as number
+        const amount = row.getValue("reimbursement") as number;
         return (
-          <span className="font-mono text-sm text-gray-700 dark:text-gray-200">
+          <span className="font-mono text-sm text-gray-700 dark:text-gray-400">
             $ {amount.toLocaleString()}
           </span>
         );
@@ -91,7 +106,14 @@ export function AttendanceTable({ attendance }: AttendanceTableProps) {
         </Button>
       ),
     },
-  ]
+  ];
 
-  return <DataTable columns={columns} data={attendance} searchKey="name" searchPlaceholder="Search attendance..." />
+  return (
+    <DataTable
+      columns={columns}
+      data={attendance}
+      searchKey="name"
+      searchPlaceholder="Search attendance..."
+    />
+  );
 }
