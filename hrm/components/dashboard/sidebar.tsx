@@ -89,7 +89,7 @@ export function DashboardSidebar() {
           <img
             src="/Logo.png" 
             alt="Betopia Group"
-            className="h-15 w-auto" 
+            className="h-15 w-auto lg:h-16"
           />
         </div>
       </div>

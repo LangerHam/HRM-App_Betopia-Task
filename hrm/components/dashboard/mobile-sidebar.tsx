@@ -101,7 +101,7 @@ export function MobileSidebar() {
               <img
                 src="/Logo.png" 
                 alt="Betopia Group"
-                className="h-8 w-auto" 
+                className="h-8 w-auto lg:h-16" 
               />
             </div>
           </div>
