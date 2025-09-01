@@ -1,6 +1,6 @@
 # HRM-Application
 
-A Human Resource Management (HRM) dashboard built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit**, and **shadcn/ui** components.  
+A Human Resource Management (HRM) dashboard built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **Redux Toolkit**.  
 The app includes authentication, dashboard KPIs, charts, employee management, and attendance tracking.
 
 
