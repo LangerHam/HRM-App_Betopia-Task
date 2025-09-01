@@ -49,7 +49,7 @@ export function AttendanceTable({ attendance }: AttendanceTableProps) {
               <AvatarImage src={record.avatar || "/placeholder.svg"} alt={record.name} />
               <AvatarFallback>{record.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span className="font-medium">{record.name}</span>
+            <span className="font-medium text-gray-900 dark:text-gray-100">{record.name}</span>
           </div>
         )
       },
@@ -71,7 +71,11 @@ export function AttendanceTable({ attendance }: AttendanceTableProps) {
       header: "Reimbursement",
       cell: ({ row }) => {
         const amount = row.getValue("reimbursement") as number
-        return `$ ${amount.toLocaleString()}`
+        return (
+          <span className="font-mono text-sm text-gray-700 dark:text-gray-200">
+            $ {amount.toLocaleString()}
+          </span>
+        );
       },
     },
     {

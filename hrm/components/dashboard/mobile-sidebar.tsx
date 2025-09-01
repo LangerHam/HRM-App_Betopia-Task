@@ -96,10 +96,10 @@ export function MobileSidebar() {
       <SheetContent side="left" className="w-64 p-0">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex h-16 items-center px-6">
             <div className="flex items-center">
               <img
-                src="/Logo.png" 
+                src="/Logo2.png" 
                 alt="Betopia Group"
                 className="h-8 w-auto lg:h-16" 
               />
@@ -131,7 +131,7 @@ export function MobileSidebar() {
             })}
           </nav>
 
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="p-4">
             <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 px-3">
               OTHER
             </p>

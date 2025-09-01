@@ -1,25 +1,57 @@
-"use client"
+"use client";
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts"
+import * as React from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { useTheme } from "next-themes";
 
 interface CompositionData {
-  label: string
-  value: number
-  color: string
+  label: string;
+  value: number;
+  color: string;
 }
 
 interface EmployeeCompositionChartProps {
-  data: CompositionData[]
+  data: CompositionData[];
 }
 
 export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps) {
-  const total = data.reduce((sum, item) => sum + item.value, 0)
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
-    const RADIAN = Math.PI / 180
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-    const x = cx + radius * Math.cos(-midAngle * RADIAN)
-    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+  React.useEffect(() => setMounted(true), []);
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+
+  const bgColor = mounted
+    ? resolvedTheme === "dark"
+      ? "bg-slate-950 border-slate-800"
+      : "bg-white border-gray-200"
+    : "bg-white border-gray-200";
+
+  const textColor = mounted
+    ? resolvedTheme === "dark"
+      ? "#D1D5DB" 
+      : "#374151" 
+    : "#374151";
+
+  const mutedTextColor = mounted
+    ? resolvedTheme === "dark"
+      ? "#9CA3AF"
+      : "#6B7280"
+    : "#6B7280";
+
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+  }: any) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     return (
       <text
@@ -32,13 +64,15 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
-    )
-  }
+    );
+  };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div className={`rounded-lg border shadow-sm ${bgColor}`}>
       <div className="p-6 pb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Employee Composition</h3>
+        <h3 className="text-lg font-semibold" style={{ color: textColor }}>
+          Employee Composition
+        </h3>
       </div>
       <div className="p-6 pt-0">
         <div className="h-64">
@@ -63,7 +97,7 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
                 verticalAlign="bottom"
                 height={36}
                 formatter={(value, entry: any) => (
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span style={{ color: mutedTextColor, fontSize: 12 }}>
                     {value} ({entry.payload.value})
                   </span>
                 )}
@@ -72,9 +106,11 @@ export function EmployeeCompositionChart({ data }: EmployeeCompositionChartProps
           </ResponsiveContainer>
         </div>
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400">{total} employee total</p>
+          <p style={{ color: mutedTextColor, fontSize: 14 }}>
+            {total} employee total
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

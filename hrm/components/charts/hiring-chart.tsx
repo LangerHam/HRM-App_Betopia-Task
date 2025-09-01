@@ -1,38 +1,84 @@
-"use client"
+"use client";
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import * as React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
+import { useTheme } from "next-themes";
 
 interface HiringSourceData {
-  label: string
-  value: number
-  color: string
+  label: string;
+  value: number;
+  color: string;
 }
 
 interface HiringSourcesChartProps {
-  data: HiringSourceData[]
+  data: HiringSourceData[];
 }
 
 export function HiringSourcesChart({ data }: HiringSourcesChartProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => setMounted(true), []);
+
+  // Theme-aware colors
+  const bgColor = mounted
+    ? resolvedTheme === "dark"
+      ? "bg-slate-950 border-slate-800"
+      : "bg-white border-gray-200"
+    : "bg-white border-gray-200";
+
+  const textColor = mounted
+    ? resolvedTheme === "dark"
+      ? "#D1D5DB" 
+      : "#6B7280" 
+    : "#6B7280";
+
+  const gridColor = mounted
+    ? resolvedTheme === "dark"
+      ? "#374151" 
+      : "#E5E7EB" 
+    : "#E5E7EB";
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div className={`rounded-lg border shadow-sm ${bgColor}`}>
       <div className="p-6 pb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Hiring Sources</h3>
+        <h3
+          className="text-lg font-semibold"
+          style={{ color: textColor }}
+        >
+          Hiring Sources
+        </h3>
       </div>
       <div className="p-6 pt-0">
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+            <BarChart
+              data={data}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
               <XAxis
                 dataKey="label"
                 axisLine={false}
                 tickLine={false}
-                className="text-xs fill-gray-600 dark:fill-gray-400"
+                style={{ fill: textColor, fontSize: 12 }}
               />
-              <YAxis axisLine={false} tickLine={false} className="text-xs fill-gray-600 dark:fill-gray-400" />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                style={{ fill: textColor, fontSize: 12 }}
+              />
               <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                 {data.map((entry, index) => (
-                  <Bar key={`bar-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Bar>
             </BarChart>
@@ -40,5 +86,5 @@ export function HiringSourcesChart({ data }: HiringSourcesChartProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -84,15 +84,15 @@ export function DashboardSidebar() {
   return (
     <div className="hidden md:flex w-64 bg-background border-r border-border flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-800">
+      <div className="flex h-16 items-center px-6">
         <div className="flex items-center">
           <img
-            src="/Logo.png" 
+            src="/Logo2.png" 
             alt="Betopia Group"
             className="h-15 w-auto lg:h-16"
           />
         </div>
-      </div>
+      </div><br/>
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
@@ -118,7 +118,7 @@ export function DashboardSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-border">
+      <div className="p-4">
         <p className="text-xs font-medium text-muted-foreground mb-2 px-3">
           OTHER
         </p>

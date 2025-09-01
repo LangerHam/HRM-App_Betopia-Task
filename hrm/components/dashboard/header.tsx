@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { SearchBar } from "@/components/ui/search-bar"
-import { UserNav } from "@/components/ui/user-nav"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { MobileSidebar } from "@/components/dashboard/mobile-sidebar"
-import { Button } from "@/components/ui/button"
-import { Bell } from "lucide-react"
-import { useAppSelector } from "@/lib/hooks"
+import { SearchBar } from "@/components/ui/search-bar";
+import { UserNav } from "@/components/ui/user-nav";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { MobileSidebar } from "@/components/dashboard/mobile-sidebar";
+import { Button } from "@/components/ui/button";
+import { Bell } from "lucide-react";
+import { useAppSelector } from "@/lib/hooks";
 
 export function DashboardHeader() {
-  const { user } = useAppSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth);
 
   const getGreeting = () => {
-    const hour = new Date().getHours()
-    if (hour < 12) return "Good Morning"
-    if (hour < 18) return "Good Afternoon"
-    return "Good Evening"
-  }
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   return (
-    <header className="h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-between px-4 md:px-6">
+    <header className="h-16 border-b border-border bg-background flex items-center justify-between px-4 md:px-6">
       <div className="flex items-center gap-4">
         <MobileSidebar />
         <div className="hidden md:block">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            👋 Hello {user?.name?.split(" ")[0] || "User"} 
+          <h1 className="text-xl font-semibold text-foreground">
+            👋 Hello {user?.name?.split(" ")[0] || "User"}
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{getGreeting()}</p>
+          <p className="text-sm text-muted-foreground">{getGreeting()}</p>
         </div>
         <div className="md:hidden">
-          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Dashboard</h1>
+          <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
         </div>
       </div>
 
@@ -46,5 +46,5 @@ export function DashboardHeader() {
         <UserNav />
       </div>
     </header>
-  )
+  );
 }

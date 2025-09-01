@@ -11,7 +11,7 @@ export async function GET() {
       {
         label: "Female",
         value: 557,
-        color: "#10b981", 
+        color: "#7b10b9ff", 
       },
     ],
     sources: [
