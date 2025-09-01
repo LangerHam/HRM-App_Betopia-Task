@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
     if(publicRoutes.includes(pathname)){
         return NextResponse.next();
     }
-    // return NextRequest.next();
+    return NextResponse.next();
 }
 
 export const config = {
