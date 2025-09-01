@@ -9,7 +9,13 @@ import { ThemeProvider } from "next-themes"
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <ThemeProvider 
+        attribute="class" 
+        defaultTheme="system" 
+        enableSystem 
+        disableTransitionOnChange={false}
+        storageKey="hrm-theme"
+      >
         {children}
       </ThemeProvider>
     </Provider>
